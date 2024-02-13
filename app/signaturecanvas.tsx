@@ -12,16 +12,21 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-import { Download, Eraser, Undo } from "lucide-react"
+import { Download, Eraser, Undo, Image, FileImage, BookImage } from "lucide-react"
 
 
 
@@ -39,7 +44,7 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
     if (canvasRef.current) {
       signaturePadRef.current = new SignaturePad(canvasRef.current, {
         minWidth: 1,
-        maxWidth: 3,
+        maxWidth: 2,
         penColor: 'black',
         backgroundColor: 'white',
       });
@@ -97,8 +102,8 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
     <div>
       <Card className="w-[350px] 2xl:w-[550px] xl:w-[550px]">
         <CardHeader>
-          <CardTitle>Draw Signature</CardTitle>
-          <CardDescription>Draw your signatur bellow.</CardDescription>
+          <CardTitle>Signature</CardTitle>
+          <CardDescription>Draw your signature below.</CardDescription>
         </CardHeader>
         <CardContent>
           <canvas ref={canvasRef} width={width} height={height}></canvas>
@@ -121,19 +126,32 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
           </div>
 
           <div className='2xl:hidden xl:hidden sm:block xs:block'>
-            <Select>
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Download as" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Download</SelectLabel>
-                  <SelectItem value="png" onClick={() => saveSignature('png')}>png</SelectItem>
-                  <SelectItem value="svg" onClick={() => saveSignature('svg')}>svg</SelectItem>
-                  <SelectItem value="jpg" onClick={() => saveSignature('jpg')}>jpg</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">Download</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Download</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => saveSignature('png')}>
+                    <Image className="mr-2 h-4 w-4" />
+                    <span>Png</span>
+                    {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => saveSignature('svg')}>
+                    <FileImage className="mr-2 h-4 w-4" />
+                    <span>Svg</span>
+                    {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => saveSignature('jpg')}>
+                    <BookImage className="mr-2 h-4 w-4" />
+                    <span>Jpg</span>
+                    {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
 
