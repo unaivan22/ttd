@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SignaturePad from 'signature_pad';
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import {
   Card,
   CardContent,
@@ -28,6 +29,7 @@ import {
 
 import { Download, Eraser, Undo, Image, FileImage, BookImage } from "lucide-react"
 
+import { ModeToggle } from '@/components/mode-toggle';
 
 
 interface SignatureCanvasProps {
@@ -102,8 +104,11 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
     <div>
       <Card className="w-[350px] 2xl:w-[550px] xl:w-[550px]">
         <CardHeader>
-          <CardTitle>Signature</CardTitle>
-          <CardDescription>Draw your signature below.</CardDescription>
+          <CardTitle className='flex items-center justify-between'>
+            Signature
+            <ModeToggle />
+          </CardTitle>
+          <CardDescription className='-translate-y-2'>Draw your signature below.</CardDescription>
         </CardHeader>
         <CardContent>
           <canvas ref={canvasRef} width={width} height={height}></canvas>
