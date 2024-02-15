@@ -42,19 +42,18 @@ interface SignatureCanvasProps {
 const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const signaturePadRef = useRef<SignaturePad | null>(null);
-  const [maxWidth, setMaxWidth] = useState<number>(2);
-  // const [savedSignature, setSavedSignature] = useState<string | null>(null);
+  const [maxWidthThickness, setMaxWidthThickness] = useState<number>(2);
 
   useEffect(() => {
     if (canvasRef.current && !signaturePadRef.current) {
       signaturePadRef.current = new SignaturePad(canvasRef.current, {
         minWidth: 1,
-        maxWidth: maxWidth,
+        maxWidth: maxWidthThickness,
         penColor: 'black',
         backgroundColor: 'white',
       });
     }
-  }, [maxWidth]); // Add maxWidth to dependencies
+  }, [maxWidthThickness]); // Add maxWidth to dependencies
 
   const clearSignature = () => {
     if (signaturePadRef.current) {
@@ -90,21 +89,17 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
           throw new Error('Invalid format');
       }
 
-      // Create temporary anchor element to trigger download
       const downloadLink = document.createElement('a');
       downloadLink.href = dataURL;
       downloadLink.download = `signature.${format}`;
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
-
-      // Set saved signature state
-      // setSavedSignature(dataURL);
     }
   };
 
-  const handleSetMaxWidth = (value: number) => {
-    setMaxWidth(value);
+  const handleSetMaxWidthThickness = (value: number) => {
+    setMaxWidthThickness(value);
   };
 
   return (
@@ -120,14 +115,13 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
             <Label>Thickness</Label>
             <input
               type="range"
-              // defaultValue={[1]}
-              max={3}
-              min={.1}
-              step={.1}
-              className={cn("w-[100%] bg-black accent-zinc-900 dark:accent-zinc-100")}
-              onChange={(e) => handleSetMaxWidth(parseFloat((e.target as HTMLInputElement).value))}
+              max={5}
+              min={1}
+              step={1}
+              className={cn("w-[100%] accent-zinc-900 dark:accent-zinc-100")}
+              onChange={(e) => handleSetMaxWidthThickness(parseFloat((e.target as HTMLInputElement).value))}
             />
-            <Label>{maxWidth}</Label>
+            <Label>{maxWidthThickness}</Label>
           </div>
         </CardHeader>
         <CardContent>
