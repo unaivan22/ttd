@@ -26,6 +26,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { Slider } from "@/components/ui/slider"
 
 import { Download, Eraser, Undo, Image, FileImage, BookImage } from "lucide-react"
 
@@ -40,18 +42,19 @@ interface SignatureCanvasProps {
 const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const signaturePadRef = useRef<SignaturePad | null>(null);
+  const [maxWidth, setMaxWidth] = useState<number>(2);
   // const [savedSignature, setSavedSignature] = useState<string | null>(null);
 
   useEffect(() => {
-    if (canvasRef.current) {
+    if (canvasRef.current && !signaturePadRef.current) {
       signaturePadRef.current = new SignaturePad(canvasRef.current, {
         minWidth: 1,
-        maxWidth: 2,
+        maxWidth: maxWidth,
         penColor: 'black',
         backgroundColor: 'white',
       });
     }
-  }, []);
+  }, [maxWidth]); // Add maxWidth to dependencies
 
   const clearSignature = () => {
     if (signaturePadRef.current) {
@@ -100,6 +103,10 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
     }
   };
 
+  const handleSetMaxWidth = (value: number) => {
+    setMaxWidth(value);
+  };
+
   return (
     <div>
       <Card className="w-[350px] 2xl:w-[550px] xl:w-[550px]">
@@ -109,6 +116,19 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ width, height }) => {
             <ModeToggle />
           </CardTitle>
           <CardDescription className='-translate-y-2'>Draw your signature below.</CardDescription>
+          <div className='flex items-center gap-x-4 py-4'>
+            <Label>Thickness</Label>
+            <input
+              type="range"
+              // defaultValue={[1]}
+              max={3}
+              min={.1}
+              step={.1}
+              className={cn("w-[100%] bg-black accent-zinc-900 dark:accent-zinc-100")}
+              onChange={(e) => handleSetMaxWidth(parseFloat((e.target as HTMLInputElement).value))}
+            />
+            <Label>{maxWidth}</Label>
+          </div>
         </CardHeader>
         <CardContent>
           <canvas ref={canvasRef} width={width} height={height}></canvas>
